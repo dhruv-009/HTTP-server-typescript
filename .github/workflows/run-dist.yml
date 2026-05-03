@@ -1,0 +1,35 @@
+name: Run dist entrypoint
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-dist:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests with coverage gate
+        run: npm test
+
+      - name: Build TypeScript
+        run: npm run build
+
+      - name: Prepare runtime text fixture
+        run: cp src/messages.txt dist/messages.txt
+
+      - name: Run dist entrypoint
+        run: node dist/index.js
