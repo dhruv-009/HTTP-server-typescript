@@ -1,0 +1,26 @@
+{
+  "name": "http-server-typescript",
+  "version": "1.0.0",
+  "description": "A typescript developed HTTP server without using http libraries, and just using raw TCP.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhruv-009/HTTP-server-typescript.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/dhruv-009/HTTP-server-typescript/issues"
+  },
+  "homepage": "https://github.com/dhruv-009/HTTP-server-typescript#readme",
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}
