@@ -2,9 +2,13 @@
   "name": "http-server-typescript",
   "version": "1.0.0",
   "description": "A typescript developed HTTP server without using http libraries, and just using raw TCP.",
-  "main": "index.js",
+  "packageManager": "npm@11.13.0",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
