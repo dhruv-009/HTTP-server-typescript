@@ -35,22 +35,46 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.main = main;
 const fs = __importStar(require("node:fs"));
-const readline = __importStar(require("readline"));
-function getLinesChannel(stream, onLine) {
-    const rl = readline.createInterface({
-        input: stream
-    });
-    rl.on('line', (chunk) => {
-        onLine(chunk);
-    });
-    rl.on('error', (err) => {
-        console.error('Error reading the files:', err);
-    });
-    rl.on('close', () => {
-        stream.destroy();
+const net = __importStar(require("net"));
+const PORT = 6891;
+const HOST = '127.0.0.1';
+function getLinesChannel(inputStream, onLine) {
+    let pending = '';
+    inputStream.on('data', (chunk) => {
+        pending += chunk.toString();
+        let newline = pending.indexOf('\n');
+        while (newline !== -1) {
+            let line = pending.slice(0, newline);
+            if (line.endsWith('\r')) {
+                line = line.slice(0, -1);
+            }
+            onLine(line);
+            pending = pending.slice(newline + 1);
+            newline = pending.indexOf('\n');
+        }
     });
 }
 function main(filePath) {
+    if (filePath) {
+        readFromFile(filePath);
+    }
+    const server = net.createServer((socket) => {
+        console.log('Connection established with the server!');
+        getLinesChannel(socket, (line) => {
+            console.log(`read: ${line}`);
+        });
+        socket.on('end', () => {
+            console.log('Closed connection!');
+        });
+        socket.on('error', (err) => {
+            console.log(`Errored out with ${err}`);
+        });
+    });
+    server.listen(PORT, HOST, () => {
+        console.log(`Server listening on Port: ${PORT}, and Host: ${HOST}`);
+    });
+}
+function readFromFile(filePath) {
     const stream = fs.createReadStream(filePath, { highWaterMark: 8 });
     getLinesChannel(stream, (line) => {
         console.log(`read: ${line}`);
